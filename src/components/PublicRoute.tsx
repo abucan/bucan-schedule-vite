@@ -1,12 +1,18 @@
 import { Navigate } from 'react-router';
-import { isAuthenticated } from '../lib/auth';
+import { useConvexAuth } from 'convex/react';
 
 interface PublicRouteProps {
   children: React.ReactNode;
 }
 
 function PublicRoute({ children }: PublicRouteProps) {
-  if (isAuthenticated()) {
+  const { isLoading, isAuthenticated } = useConvexAuth();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isAuthenticated) {
     return <Navigate to='/dashboard' replace />;
   }
 
@@ -14,4 +20,3 @@ function PublicRoute({ children }: PublicRouteProps) {
 }
 
 export default PublicRoute;
-

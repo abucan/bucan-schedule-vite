@@ -1,12 +1,18 @@
 import { Navigate } from 'react-router';
-import { isAuthenticated } from '../lib/auth';
+import { useConvexAuth } from 'convex/react';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
 function ProtectedRoute({ children }: ProtectedRouteProps) {
-  if (!isAuthenticated()) {
+  const { isLoading, isAuthenticated } = useConvexAuth();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!isAuthenticated) {
     return <Navigate to='/signin' replace />;
   }
 
